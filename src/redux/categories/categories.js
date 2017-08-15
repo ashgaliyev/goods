@@ -2,7 +2,7 @@
 export const TOGGLE = 'category/TOGGLE'
 export const RESET = 'category/RESET'
 export const ADD = 'category/ADD'
-export const UPDATE = 'category/UPDATE'
+export const SAVE = 'category/SAVE'
 export const DELETE = 'category/DELETE'
 
 //reducer
@@ -28,6 +28,7 @@ export default function(state = initialState, action) {
 //actions
 export const toggleCategory = id => ({ type: TOGGLE, id })
 export const reset = () => ({ type: RESET })
+export const save = (id, name) => ({ type: SAVE, id, name })
 
 //selectors
 export const getCategories = state => state.categories.items
