@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Modal, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { save } from '../../redux/categories/categories'
+import createModal from '../Form/Form'
 
 class CategoryForm extends Component {
   constructor(props) {
@@ -9,42 +11,73 @@ class CategoryForm extends Component {
 
     this.state = {
       name: props.name,
+      id: props.id,
     }
 
     this.change = this.change.bind(this)
+    this.onSave = this.onSave.bind(this)
   }
 
   change(e) {
     this.setState({ name: e.target.value })
   }
 
+  onSave() {
+    const { id, name } = this.state
+
+    this.props.update(id, name)
+
+    if (typeof this.props.close !== 'undefined') {
+      this.props.close()
+    }
+  }
+
   render() {
-    const { title, isShown, close, update } = this.props
+    const { close } = this.props
+    const { id, name } = this.state
 
     return (
-      <Modal className="modal-container" show={isShown} onHide={() => close()}>
-        <Modal.Header>
-          <Modal.Title>
-            {title}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="form-group">
-            <input type="text" value={this.state.name} onChange={this.change} />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={() => update(this.state.id, this.state.name)}>
-            Сохранить
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <form>
+        <div className="form-group">
+          <label>Название</label>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.name}
+            onChange={this.change}
+          />
+        </div>
+        <button onClick={this.onSave} className="btn btn-primary">
+          Сохранить
+        </button>
+      </form>
     )
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  update: (id, name) => dispatch(save(id, name)),
+CategoryForm.propTypes = {
+  id: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  update: PropTypes.func.isRequired,
+  close: PropTypes.func,
+}
+
+const mapStateToProps = (state, ownProps) => ({
+  name:
+    ownProps.id === null
+      ? ''
+      : state.categories.items.reduce(
+          (acc, { id, name }) => (id === ownProps.id ? name : acc),
+          ''
+        ),
 })
 
-export default connect(null, mapDispatchToProps)(CategoryForm)
+const mapDispatchToProps = dispatch => ({
+  update: (id, name) => {
+    dispatch(save(id, name))
+  },
+})
+
+export default createModal(
+  connect(mapStateToProps, mapDispatchToProps)(CategoryForm)
+)

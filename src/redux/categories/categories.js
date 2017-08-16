@@ -1,7 +1,6 @@
 //action types
 export const TOGGLE = 'category/TOGGLE'
 export const RESET = 'category/RESET'
-export const ADD = 'category/ADD'
 export const SAVE = 'category/SAVE'
 export const DELETE = 'category/DELETE'
 
@@ -11,8 +10,30 @@ const initialState = {
   selectedId: [],
 }
 
+const nextId = state => {
+  return (
+    state.items.reduce((acc, elem) => (elem.id > acc ? elem.id : acc), 0) + 1
+  )
+}
+
 export default function(state = initialState, action) {
   switch (action.type) {
+    case SAVE: {
+      if (action.id === null) {
+        return Object.assign({}, state, {
+          items: [...state.items, { id: nextId(state), name: action.name }],
+        })
+      }
+
+      return Object.assign({}, state, {
+        items: state.items.map(elem => {
+          if (elem.id === action.id) {
+            elem.name = action.name
+          }
+          return elem
+        }),
+      })
+    }
     case TOGGLE:
       return Object.assign({}, state, {
         selectedId:

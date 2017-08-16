@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { toggleCategory, reset } from '../../redux/categories/categories'
 
-const CategoryList = ({ items, selectedId, toggleCategory, reset }) =>
+const CategoryList = ({ onEdit, items, selectedId, toggleCategory, reset }) =>
   <div className="CategoryList">
     {items.map((elem, i) =>
       <div key={i} className="checkbox">
@@ -10,6 +10,9 @@ const CategoryList = ({ items, selectedId, toggleCategory, reset }) =>
           <input type="checkbox" checked={selectedId.indexOf(elem.id) !== -1} />
           <a href="#" onClick={() => toggleCategory(elem.id)}>
             {elem.name}
+          </a>
+          <a href="#" onClick={() => onEdit(elem.id)}>
+            Edit
           </a>
         </label>
       </div>
