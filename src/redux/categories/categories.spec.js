@@ -1,18 +1,32 @@
 import { expect } from 'chai'
-import reducer, { TOGGLE, toggleCategory, RESET, reset } from './categories'
+import reducer, { selectCategory, save, del } from './categories'
 
 describe('redux: categories', () => {
   it('works', () => {
     expect(true).to.be.true
   })
 
-  it('should toggle category', () => {
-    expect(reducer({ selectedId: [] }, toggleCategory(1))).to.deep.equal({
-      selectedId: [1],
+  it('should select category', () => {
+    expect(reducer({ selectedId: null }, selectCategory(1))).to.deep.equal({
+      selectedId: 1,
     })
+  })
 
-    expect(reducer({ selectedId: [1] }, toggleCategory(1))).to.deep.equal({
-      selectedId: [],
+  it('should unselect categories', () => {
+    expect(reducer({ selectedId: 1 }, selectCategory(null))).to.deep.equal({
+      selectedId: null,
+    })
+  })
+
+  it('should create category', () => {
+    expect(reducer({ items: [] }, save(null, 'test'))).to.deep.equal({
+      items: [{ id: 1, name: 'test' }],
+    })
+  })
+
+  it('should delete category', () => {
+    expect(reducer({ items: [{ id: 1, name: 'ttt' }] }, del(1))).to.deep.equal({
+      items: [],
     })
   })
 })

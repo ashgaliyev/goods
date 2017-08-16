@@ -1,5 +1,5 @@
 //action types
-export const TOGGLE = 'category/TOGGLE'
+export const SELECT = 'category/SELECT'
 export const RESET = 'category/RESET'
 export const SAVE = 'category/SAVE'
 export const DELETE = 'category/DELETE'
@@ -34,12 +34,14 @@ export default function(state = initialState, action) {
         }),
       })
     }
-    case TOGGLE:
+    case DELETE: {
       return Object.assign({}, state, {
-        selectedId:
-          state.selectedId.indexOf(action.id) !== -1
-            ? state.selectedId.filter(x => x !== action.id)
-            : [...state.selectedId, action.id],
+        items: state.items.filter(x => x.id !== action.id),
+      })
+    }
+    case SELECT:
+      return Object.assign({}, state, {
+        selectedId: action.id,
       })
     default:
       return state
@@ -47,9 +49,9 @@ export default function(state = initialState, action) {
 }
 
 //actions
-export const toggleCategory = id => ({ type: TOGGLE, id })
-export const reset = () => ({ type: RESET })
+export const selectCategory = id => ({ type: SELECT, id })
 export const save = (id, name) => ({ type: SAVE, id, name })
+export const del = id => ({ type: DELETE, id })
 
 //selectors
 export const getCategories = state => state.categories.items

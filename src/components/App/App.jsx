@@ -4,6 +4,7 @@ import './App.css'
 import CategoryList from '../CategoryList/CategoryList'
 import { Button } from 'react-bootstrap'
 import CategoryForm from '../CategoryForm'
+import CategoryDelete from '../CategoryDelete'
 
 const CATEGORY_CREATE = 'modal/category/CREATE'
 const CATEGORY_UPDATE = 'modal/category/UPDATE'
@@ -22,6 +23,7 @@ export default class App extends Component {
     this.close = this.close.bind(this)
     this.editCategory = this.editCategory.bind(this)
     this.addCategory = this.addCategory.bind(this)
+    this.deleteCategory = this.deleteCategory.bind(this)
   }
 
   close() {
@@ -48,11 +50,23 @@ export default class App extends Component {
     })
   }
 
+  deleteCategory(id) {
+    this.setState({
+      showModal: CATEGORY_DELETE,
+      editCategoryId: id,
+      editProductId: null,
+    })
+  }
+
   render() {
     const showCategoryForm =
       this.state.showModal === CATEGORY_CREATE ||
       (this.state.showModal === CATEGORY_UPDATE &&
         this.state.editCategoryId !== null)
+
+    const showCategoryDelete =
+      this.state.showModal === CATEGORY_DELETE &&
+      this.state.editCategoryId !== null
 
     let catTitle = 'Добавить категорию'
 
@@ -72,11 +86,20 @@ export default class App extends Component {
               isShown={showCategoryForm}
               close={this.close}
             />
+            <CategoryDelete
+              title="Хотите удалить категорию?"
+              id={this.state.editCategoryId}
+              isShown={showCategoryDelete}
+              close={this.close}
+            />
           </div>
         </div>
         <div className="row">
           <div className="col-md-3">
-            <CategoryList onEdit={id => this.editCategory(id)} />
+            <CategoryList
+              onDelete={id => this.deleteCategory(id)}
+              onEdit={id => this.editCategory(id)}
+            />
           </div>
           <div className="col-md-9" />
         </div>

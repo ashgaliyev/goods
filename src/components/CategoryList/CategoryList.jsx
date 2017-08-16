@@ -1,40 +1,49 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { toggleCategory, reset } from '../../redux/categories/categories'
+import { selectCategory } from '../../redux/categories/categories'
 
-const CategoryList = ({ onEdit, items, selectedId, toggleCategory, reset }) =>
+const CategoryList = ({
+  onEdit,
+  onDelete,
+  items,
+  selectedId,
+  selectCategory,
+  withoutCat,
+}) =>
   <div className="CategoryList">
     {items.map((elem, i) =>
-      <div key={i} className="checkbox">
-        <label>
-          <input type="checkbox" checked={selectedId.indexOf(elem.id) !== -1} />
-          <a href="#" onClick={() => toggleCategory(elem.id)}>
-            {elem.name}
-          </a>
-          <a href="#" onClick={() => onEdit(elem.id)}>
-            Edit
-          </a>
-        </label>
+      <div key={i} className={selectedId === elem.id ? 'active' : ''}>
+        <a href="#" onClick={() => onDelete(elem.id)}>
+          X
+        </a>
+        <a href="#" onClick={() => selectCategory(elem.id)}>
+          {elem.name}
+        </a>
+        <a href="#" onClick={() => onEdit(elem.id)}>
+          Edit
+        </a>
       </div>
     )}
-    {selectedId.length > 0 &&
-      <div className="checkbox">
-        <label>
-          <a href="#" onClick={() => reset()}>
-            Без категории
-          </a>
-        </label>
+    {withoutCat &&
+      <div className={selectedId === null ? 'active' : ''}>
+        <a href="#" onClick={() => selectCategory(null)}>
+          Без категории
+        </a>
       </div>}
   </div>
 
 const mapStateToProps = state => ({
   items: state.categories.items,
   selectedId: state.categories.selectedId,
+  withoutCat:
+    state.products.items.reduce(
+      (acc, p) => (p.category_id === null ? acc + 1 : acc),
+      0
+    ) > 0,
 })
 
 const mapDispatchToProps = dispatch => ({
-  toggleCategory: id => dispatch(toggleCategory(id)),
-  reset: () => dispatch(reset()),
+  selectCategory: id => dispatch(selectCategory(id)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryList)
