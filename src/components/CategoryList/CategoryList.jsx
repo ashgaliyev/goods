@@ -37,7 +37,7 @@ const mapStateToProps = state => ({
   selectedId: state.categories.selectedId,
   withoutCat:
     state.products.items.reduce(
-      (acc, p) => (p.category_id === null ? acc + 1 : acc),
+      (acc, p) => (p.categoryId === null ? acc + 1 : acc),
       0
     ) > 0,
 })

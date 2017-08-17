@@ -7,7 +7,7 @@ export const DELETE = 'category/DELETE'
 //reducer
 const initialState = {
   items: [{ id: 1, name: 'Cars' }, { id: 2, name: 'Computers' }],
-  selectedId: [],
+  selectedId: null,
 }
 
 const nextId = state => {
@@ -52,6 +52,3 @@ export default function(state = initialState, action) {
 export const selectCategory = id => ({ type: SELECT, id })
 export const save = (id, name) => ({ type: SAVE, id, name })
 export const del = id => ({ type: DELETE, id })
-
-//selectors
-export const getCategories = state => state.categories.items
