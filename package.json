@@ -60,6 +60,7 @@
     "dev": "webpack-dev-server --debug --hot --devtool eval-source-map --output-pathinfo --watch --colors --inline --content-base public --port 8050 --host 0.0.0.0",
     "nodemon": "NODE_PATH=./src nodemon server.js",
     "test": "jest",
-    "fix-js": "eslint . --ext .js --fix && eslint . --ext .jsx --fix"
+    "fix-js": "eslint . --ext .js --fix && eslint . --ext .jsx --fix",
+    "postdeploy": "npm run build && npm run start"
   }
 }
