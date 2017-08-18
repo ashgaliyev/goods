@@ -61,6 +61,6 @@
     "nodemon": "NODE_PATH=./src nodemon server.js",
     "test": "jest",
     "fix-js": "eslint . --ext .js --fix && eslint . --ext .jsx --fix",
-    "postdeploy": "npm run build && npm run start"
+    "heroku-postbuild": "yarn && npm run build && npm run start"
   }
 }
