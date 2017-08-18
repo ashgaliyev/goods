@@ -5,7 +5,13 @@ import ReactDom from 'react-dom/server'
 import { Provider } from 'react-redux'
 import configureStore from './redux/configureStore'
 
+import path from 'path'
+
 const app = express()
+
+app.use('/public', express.static(path.join(__dirname, '..', 'public')))
+
+console.log(path.join(__dirname, '..', 'public'))
 
 app.use((req, res) => {
   const store = configureStore()
@@ -24,7 +30,7 @@ app.use((req, res) => {
 })
 
 const assetUrl =
-  process.env.NODE_ENV !== 'production' ? 'http://localhost:8050' : '/'
+  process.env.NODE_ENV !== 'production' ? 'http://localhost:8050/' : ''
 
 function renderHTML(componentHTML) {
   return `

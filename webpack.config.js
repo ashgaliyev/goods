@@ -5,11 +5,11 @@ var path = require('path')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var CleanWebpackPlugin = require('clean-webpack-plugin')
 
-var publicPath = 'http://localhost:8050/public/assets'
-var cssName =
-  process.env.NODE_ENV === 'production' ? 'styles-[hash].css' : 'styles.css'
-var jsName =
-  process.env.NODE_ENV === 'production' ? 'bundle-[hash].js' : 'bundle.js'
+var publicPath =
+  process.env.NODE_ENV === 'production' ? '/public/assets' : 'http://localhost:8050/public/assets'
+
+var cssName = 'styles.css'
+var jsName = 'bundle.js'
 
 var plugins = [
   new webpack.DefinePlugin({
