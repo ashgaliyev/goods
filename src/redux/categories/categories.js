@@ -1,54 +1,73 @@
+import store from '../configureStore'
+import { updateState } from '../app/app'
+
 //action types
 export const SELECT = 'category/SELECT'
-export const RESET = 'category/RESET'
-export const SAVE = 'category/SAVE'
-export const DELETE = 'category/DELETE'
+export const UPDATE_CATEGORIES = 'category/UPDATE_CATEGORIES'
 
 //reducer
 const initialState = {
-  items: [{ id: 1, name: 'Cars' }, { id: 2, name: 'Computers' }],
+  items: [],
   selectedId: null,
-}
-
-const nextId = state => {
-  return (
-    state.items.reduce((acc, elem) => (elem.id > acc ? elem.id : acc), 0) + 1
-  )
 }
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case SAVE: {
-      if (action.id === null) {
-        return Object.assign({}, state, {
-          items: [...state.items, { id: nextId(state), name: action.name }],
-        })
-      }
-
-      return Object.assign({}, state, {
-        items: state.items.map(elem => {
-          if (elem.id === action.id) {
-            elem.name = action.name
-          }
-          return elem
-        }),
-      })
-    }
-    case DELETE: {
-      return Object.assign({}, state, {
-        items: state.items.filter(x => x.id !== action.id),
-      })
-    }
-    case SELECT:
+    case SELECT: {
       return Object.assign({}, state, {
         selectedId: action.id,
       })
+    }
+    case UPDATE_CATEGORIES: {
+      return Object.assign({}, state, {
+        items: action.payload,
+      })
+    }
     default:
       return state
   }
 }
 
 //actions
-export const selectCategory = id => ({ type: SELECT, id })
-export const save = (id, name) => ({ type: SAVE, id, name })
-export const del = id => ({ type: DELETE, id })
+export const selectCategory = id => {
+  return function(dispatch) {
+    dispatch({ type: SELECT, id })
+  }
+}
+
+export const del = id => {
+  return dispatch => {
+    return fetch('/categories/' + id, {
+      method: 'DELETE',
+    })
+      .then(res => console.log(res), error => console.log(error))
+      .then(() => dispatch(updateState()))
+  }
+}
+export const save = (id, name) => {
+  return dispatch => {
+    if (id === null) {
+      return fetch('/categories', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+      })
+        .then(res => console.log(res), error => console.log(error))
+        .then(() => dispatch(updateState()))
+    } else {
+      return fetch('/categories/' + id, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name }),
+      })
+        .then(res => console.log(res), error => console.log(error))
+        .then(() => dispatch(updateState()))
+    }
+  }
+}

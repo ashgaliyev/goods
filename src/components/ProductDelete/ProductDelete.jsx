@@ -4,14 +4,14 @@ import { ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { del } from '../../redux/products/products'
 
-const deleteForm = ({ id, close, del }) =>
+const deleteForm = ({ _id, close, del }) =>
   <div>
     <p>Вы действительно хотите удалить товар?</p>
     <ButtonGroup>
       <Button
         bsStyle="primary"
         onClick={() => {
-          del(id)
+          del(_id)
           close()
         }}>
         Да

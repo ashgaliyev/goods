@@ -1,0 +1,31 @@
+.category-list {
+  margin-top:30px;
+  margin-bottom:30px;
+}
+.category-list .cat-name {
+  padding-left:10px;
+  padding-right:10px;
+}
+
+.category-item {
+  display: block;
+  padding: 10px;
+  border-radius:5px;
+  min-width:200px;
+}
+
+.category-item.active, .category-item:hover {
+  background:#337ab7;
+  cursor:pointer;
+}
+.category-item.active a, .category-item:hover a {
+  color:white;
+}
+.category-item a.del-cat {
+  font-size:12px;
+  color:red;
+}
+.category-item a.edit-cat {
+  font-size:12px;
+  color:grey;
+}

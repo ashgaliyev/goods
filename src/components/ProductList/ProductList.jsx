@@ -5,9 +5,9 @@ import { connect } from 'react-redux'
 const filterItemsByCatId = (items, catId) =>
   items.filter(elem => {
     if (catId === null) {
-      return elem.categoryId === null
+      return elem.category_id === null
     }
-    return elem.categoryId === catId
+    return elem.category_id === catId
   })
 
 const ProductList = ({ items, selectedCatId, onDelete, onEdit }) =>
@@ -25,7 +25,7 @@ const ProductList = ({ items, selectedCatId, onDelete, onEdit }) =>
       {filterItemsByCatId(items, selectedCatId).map((elem, i) =>
         <tr key={i}>
           <td>
-            {elem.id}
+            {i}
           </td>
           <td>
             {elem.name}
@@ -38,10 +38,10 @@ const ProductList = ({ items, selectedCatId, onDelete, onEdit }) =>
           </td>
           <td>
             <ButtonGroup>
-              <Button onClick={() => onDelete(elem.id)} bsStyle="danger">
+              <Button onClick={() => onDelete(elem._id)} bsStyle="danger">
                 Удалить
               </Button>
-              <Button onClick={() => onEdit(elem.id)} bsStyle="primary">
+              <Button onClick={() => onEdit(elem._id)} bsStyle="primary">
                 Изменить
               </Button>
             </ButtonGroup>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { selectCategory } from '../../redux/categories/categories'
+import './CategoryList.css'
 
 const CategoryList = ({
   onEdit,
@@ -10,25 +11,44 @@ const CategoryList = ({
   selectCategory,
   withoutCat,
 }) =>
-  <div className="CategoryList">
+  <div className="category-list">
     {items.map((elem, i) =>
-      <div key={i} className={selectedId === elem.id ? 'active' : ''}>
-        <a href="#" onClick={() => onDelete(elem.id)}>
+      <div
+        key={i}
+        onClick={() => selectCategory(elem._id)}
+        className={
+          selectedId === elem._id ? 'category-item active' : 'category-item'
+        }>
+        <a
+          className="del-cat"
+          href="#"
+          onClick={e => {
+            e.stopPropagation()
+            onDelete(elem._id)
+          }}>
           X
         </a>
-        <a href="#" onClick={() => selectCategory(elem.id)}>
+        <a className="cat-name" href="#">
           {elem.name}
         </a>
-        <a href="#" onClick={() => onEdit(elem.id)}>
+        <a
+          className="edit-cat"
+          href="#"
+          onClick={e => {
+            e.stopPropagation()
+            onEdit(elem._id)
+          }}>
           Edit
         </a>
       </div>
     )}
     {withoutCat &&
-      <div className={selectedId === null ? 'active' : ''}>
-        <a href="#" onClick={() => selectCategory(null)}>
-          Без категории
-        </a>
+      <div
+        onClick={() => selectCategory(null)}
+        className={
+          selectedId === null ? 'category-item active' : 'category-item'
+        }>
+        <a href="#">Без категории</a>
       </div>}
   </div>
 
@@ -37,7 +57,7 @@ const mapStateToProps = state => ({
   selectedId: state.categories.selectedId,
   withoutCat:
     state.products.items.reduce(
-      (acc, p) => (p.categoryId === null ? acc + 1 : acc),
+      (acc, p) => (p.category_id === null ? acc + 1 : acc),
       0
     ) > 0,
 })

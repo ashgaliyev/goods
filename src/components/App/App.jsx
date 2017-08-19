@@ -125,33 +125,33 @@ export default class App extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-md-3">LOGO</div>
+          <div className="col-md-3 logo">LOGO</div>
           <div className="col-md-9">
-            <ButtonGroup>
+            <ButtonGroup className="top-buttons">
               <Button onClick={this.addProduct}>Добавить товар</Button>
               <Button onClick={this.addCategory}>Добавить категорию</Button>
             </ButtonGroup>
             <ProductForm
               title={productTitle}
-              id={this.state.editProductId}
+              _id={this.state.editProductId}
               isShown={showProductForm}
               close={this.close}
             />
             <ProductDelete
               title=""
-              id={this.state.editProductId}
+              _id={this.state.editProductId}
               isShown={showProductDelete}
               close={this.close}
             />
             <CategoryForm
               title={catTitle}
-              id={this.state.editCategoryId}
+              _id={this.state.editCategoryId}
               isShown={showCategoryForm}
               close={this.close}
             />
             <CategoryDelete
               title="Хотите удалить категорию?"
-              id={this.state.editCategoryId}
+              _id={this.state.editCategoryId}
               isShown={showCategoryDelete}
               close={this.close}
             />

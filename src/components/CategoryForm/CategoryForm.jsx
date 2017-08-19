@@ -11,7 +11,7 @@ class CategoryForm extends Component {
 
     this.state = {
       name: props.name,
-      id: props.id,
+      _id: props._id,
     }
 
     this.change = this.change.bind(this)
@@ -23,9 +23,9 @@ class CategoryForm extends Component {
   }
 
   onSave() {
-    const { id, name } = this.state
+    const { _id, name } = this.state
 
-    this.props.update(id, name)
+    this.props.update(_id, name)
 
     if (typeof this.props.close !== 'undefined') {
       this.props.close()
@@ -34,10 +34,10 @@ class CategoryForm extends Component {
 
   render() {
     const { close } = this.props
-    const { id, name } = this.state
+    const { name } = this.state
 
     return (
-      <form>
+      <div>
         <div className="form-group">
           <label>Название</label>
           <input
@@ -50,13 +50,13 @@ class CategoryForm extends Component {
         <button onClick={this.onSave} className="btn btn-primary">
           Сохранить
         </button>
-      </form>
+      </div>
     )
   }
 }
 
 CategoryForm.propTypes = {
-  id: PropTypes.number,
+  _id: PropTypes.string,
   name: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
   close: PropTypes.func,
@@ -64,10 +64,10 @@ CategoryForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   name:
-    ownProps.id === null
+    ownProps._id === null
       ? ''
       : state.categories.items.reduce(
-          (acc, { id, name }) => (id === ownProps.id ? name : acc),
+          (acc, { _id, name }) => (_id === ownProps._id ? name : acc),
           ''
         ),
 })

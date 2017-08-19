@@ -4,14 +4,14 @@ import { ButtonGroup, Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { del } from '../../redux/categories/categories'
 
-const deleteForm = ({ id, close, del }) =>
+const deleteForm = ({ _id, close, del }) =>
   <div>
     <p>Все товары в этой категории будут помечены "Без категории"</p>
     <ButtonGroup>
       <Button
         bsStyle="primary"
         onClick={() => {
-          del(id)
+          del(_id)
           close()
         }}>
         Да

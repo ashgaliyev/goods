@@ -51,7 +51,7 @@ class ProductForm extends Component {
   changeCategory(e) {
     this.setState(
       Object.assign({}, this.state, {
-        categoryId: parseInt(e.target.value) === -1 ? null : e.target.value,
+        category_id: e.target.value === '-1' ? null : e.target.value,
       })
     )
   }
@@ -59,9 +59,9 @@ class ProductForm extends Component {
   onSave(e) {
     e.preventDefault()
 
-    const { id, categoryId, name, purchasePrice, price } = this.state
+    const { _id, category_id, name, purchasePrice, price } = this.state
 
-    this.props.update(id, categoryId, name, purchasePrice, price)
+    this.props.update(_id, category_id, name, purchasePrice, price)
 
     if (typeof this.props.close !== 'undefined') {
       this.props.close()
@@ -71,13 +71,15 @@ class ProductForm extends Component {
   render() {
     const { close } = this.props
     const {
-      id,
+      _id,
       categories,
-      categoryId,
+      category_id,
       name,
       purchasePrice,
       price,
     } = this.state
+
+    console.log(category_id)
 
     return (
       <form>
@@ -85,13 +87,13 @@ class ProductForm extends Component {
           <label>Категория</label>
           <FormControl
             componentClass="select"
-            value={categoryId === null ? -1 : categoryId}
+            value={category_id === null ? -1 : category_id}
             onChange={this.changeCategory}>
             <option key={9999} value={-1}>
               Без категории
             </option>
             {categories.map(elem =>
-              <option key={elem.id} value={elem.id}>
+              <option key={elem._id} value={elem._id}>
                 {elem.name}
               </option>
             )}
@@ -132,31 +134,24 @@ class ProductForm extends Component {
   }
 }
 
-ProductForm.propTypes = {
-  id: PropTypes.number,
-  categoryId: PropTypes.number,
-  categories: PropTypes.array.isRequired,
-  name: PropTypes.string,
-  purchasePrice: PropTypes.number,
-  price: PropTypes.number,
-  update: PropTypes.func.isRequired,
-  close: PropTypes.func,
-}
-
 const mapStateToProps = (state, ownProps) => {
   let props = {
-    id: null,
-    categoryId: null,
+    _id: null,
+    category_id: null,
     name: '',
     purchasePrice: 0,
     price: 0,
   }
-  if (ownProps.id !== null) {
+  if (ownProps._id !== null) {
     let product = state.products.items.reduce(
-      (acc, elem) => (elem.id === ownProps.id ? elem : acc),
+      (acc, elem) => (elem._id === ownProps._id ? elem : acc),
       null
     )
     props = { ...product }
+  }
+
+  if (props.category_id === null && state.categories.selectedId !== null) {
+    props.category_id = state.categories.selectedId
   }
 
   props.categories = state.categories.items
@@ -164,8 +159,8 @@ const mapStateToProps = (state, ownProps) => {
   return props
 }
 const mapDispatchToProps = dispatch => ({
-  update: (id, categoryId, name, purchasePrice, price) => {
-    dispatch(save(id, categoryId, name, purchasePrice, price))
+  update: (id, category_id, name, purchasePrice, price) => {
+    dispatch(save(id, category_id, name, purchasePrice, price))
   },
 })
 

@@ -1,7 +1,7 @@
 import { ObjectID } from 'mongodb'
 
 export default function(app, db) {
-  app.get('/state', (req, res) => {
+  app.get('/update-state', (req, res) => {
     db.collection('categories').find({}).toArray((err, result) => {
       if (err) {
         console.log(err)
@@ -12,26 +12,12 @@ export default function(app, db) {
             console.log(err2)
             res.send({ error: 'An error has occured' })
           } else {
-            const st = result.reduce((acc, cat) => {
-              const products = res2.filter(
-                prod =>
-                  prod.category_id !== null
-                    ? prod.category_id.equals(cat._id)
-                    : false
-              )
-              cat.products = products
-              acc.push(cat)
-              return acc
-            }, [])
+            const state = {
+              categories_items: result,
+              products_items: res2,
+            }
 
-            const nocat = res2.filter(prod => prod.category_id === null)
-
-            st.push({
-              name: null,
-              products: nocat,
-            })
-
-            res.send(st)
+            res.send(state)
           }
         })
       }
@@ -106,8 +92,8 @@ export default function(app, db) {
 
   //get
   app.get('/products/category/:id', (req, res) => {
-    const id = req.params.id
-    const query = { category_id: new ObjectID(id) }
+    const id = req.params.id === 'null' ? null : new ObjectID(req.params.id)
+    const query = { category_id: id }
     db.collection('products').find(query).toArray((err, result) => {
       if (err) {
         console.log(err)
@@ -120,8 +106,7 @@ export default function(app, db) {
 
   //insert
   app.post('/products', (req, res) => {
-    const catId =
-      req.body.category_id.length === 0 ? null : req.body.category_id
+    const catId = req.body.category_id
     const product = {
       name: req.body.name,
       category_id: catId === null ? null : new ObjectID(catId),
@@ -141,9 +126,7 @@ export default function(app, db) {
   //update
   app.put('/products/:id', (req, res) => {
     const id = req.params.id
-    console.log(req.body.category_id)
-    const catId =
-      req.body.category_id.length === 0 ? null : req.body.category_id
+    const catId = req.body.category_id
     const details = { _id: new ObjectID(id) }
     const product = {
       name: req.body.name,
