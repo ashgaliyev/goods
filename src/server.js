@@ -7,8 +7,20 @@ import ReactDom from 'react-dom/server'
 import { Provider } from 'react-redux'
 import configureStore from './redux/configureStore'
 import routes from './routes'
-import { dbUrl } from './config/db'
 import path from 'path'
+import aws from 'aws-sdk'
+
+let s3 = new aws.S3({
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+})
+
+const dbUrl =
+  'mongodb://' +
+  s3.username +
+  ':' +
+  s3.password +
+  '@ds145273.mlab.com:45273/goods'
 
 const app = express()
 const PORT = process.env.PORT || 3002
