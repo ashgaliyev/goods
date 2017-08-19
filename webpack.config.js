@@ -6,7 +6,9 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var CleanWebpackPlugin = require('clean-webpack-plugin')
 
 var publicPath =
-  process.env.NODE_ENV === 'production' ? '/public/assets' : 'http://localhost:8050/public/assets'
+  process.env.NODE_ENV === 'production'
+    ? '/public/assets'
+    : 'http://localhost:8050/public/assets'
 
 var cssName = 'styles.css'
 var jsName = 'bundle.js'
