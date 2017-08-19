@@ -15,6 +15,9 @@ let s3 = new aws.S3({
   password: process.env.DB_PASSWORD,
 })
 
+console.log(s3)
+console.log(process.env)
+
 const dbUrl =
   'mongodb://' +
   s3.username +
